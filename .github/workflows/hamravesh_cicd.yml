@@ -13,14 +13,21 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     services:
-      db: 
+      postgres: 
         image: postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
-          - 5432:5432 # exposing 5432 port for application to use
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - uses: actions/checkout@v3
     - name: unpack environments
