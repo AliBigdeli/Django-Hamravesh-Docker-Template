@@ -1,0 +1,21 @@
+name: Django Project Test and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  Test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: unpack environments
+      run: cp ./envs/dev/django/.env.sample ./envs/dev/django/.env && cp ./envs/dev/postgre/.env.sample ./envs/dev/postgre/.env
+    - name: Setup Docker-Compose
+      run: docker-compose up --build -d
+    - name: Run Tests
+      run: docker-compose exec -T backend sh -c "python manage.py test"
