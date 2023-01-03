@@ -27,8 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: building darkube
-      run: |
-        docker run darkube-cli:v1.1 sh -c "export IMAGE='registry.hamdocker.ir/hamravesh/${{secrets.APPNAME}}'"
-        docker run darkube-cli:v1.1 sh -c "export IMAGE='registry.hamdocker.ir/hamravesh/${{secrets.APPNAME}}'"
+    - name: deploy to hamravesh
+      run: curl --location --request GET 'https://api.console.hamravesh.ir/api/v1/darkube/build/build_last_commit/?app_id=a2d4014a-7742-44e0-a386-39a68d32f52f' --header 'x-organization: sama' --header 'Authorization: Api-key 76d9d830-70b8-4efc-b88e-10ce0b4c5c22'
 
