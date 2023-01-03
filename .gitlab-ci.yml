@@ -40,6 +40,7 @@ test:
 # deployment stage
 deploy:
   stage: deploy
-  script: curl --location --request GET 'https://api.console.hamravesh.ir/api/v1/darkube/build/build_last_commit/?app_id=$HAMRAVESH_APP_ID' \
-          --header 'x-organization: $HAMRAVESH_ORG_NAME' \
-          --header 'Authorization: Api-key $HAMRAVESH_API_KEY'
+  script: - >
+    curl --location --request GET 'https://api.console.hamravesh.ir/api/v1/darkube/build/build_last_commit/?app_id=$HAMRAVESH_APP_ID' \
+    --header 'x-organization: $HAMRAVESH_ORG_NAME' \
+    --header 'Authorization: Api-key $HAMRAVESH_API_KEY'
