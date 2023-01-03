@@ -3,9 +3,9 @@ name: Django Project Test and Deploy
 
 on:
   push:
-    branches: [ prod ]
+    branches: [ main ]
   pull_request:
-    branches: [ prod ]
+    branches: [ main ]
 
 jobs:
 
@@ -20,23 +20,23 @@ jobs:
       run: docker exec backend sh -c "flake8 && pytest ."
 
   
-  Deploy:
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
-    name: Deploy
-    needs: Test
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Connect and Execute Commands
-      uses: appleboy/ssh-action@master
-      with:
-        username: ${{secrets.USERNAME}}
-        password: ${{secrets.PASSWORD}}
-        host: ${{secrets.HOST}}
-        port: ${{secrets.PORT}}
-        script: |
-          cd ${{secrets.PROJECT_PATH}}
-          docker compose -f docker-compose-prod.yml stop
-          git pull
-          docker compose -f docker-compose-prod.yml restart
+  # Deploy:
+  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
+  #   name: Deploy
+  #   needs: Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: Connect and Execute Commands
+  #     uses: appleboy/ssh-action@master
+  #     with:
+  #       username: ${{secrets.USERNAME}}
+  #       password: ${{secrets.PASSWORD}}
+  #       host: ${{secrets.HOST}}
+  #       port: ${{secrets.PORT}}
+  #       script: |
+  #         cd ${{secrets.PROJECT_PATH}}
+  #         docker compose -f docker-compose-prod.yml stop
+  #         git pull
+  #         docker compose -f docker-compose-prod.yml restart
           
