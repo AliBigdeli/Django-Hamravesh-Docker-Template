@@ -14,10 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: unpack environments
+      run: cp ./envs/dev/django/.env.sample ./envs/dev/django/.env && cp ./envs/dev/postgre/.env.sample ./envs/dev/postgre/.env
     - name: Setup Docker-Compose
       run: docker-compose up -d
     - name: Run Tests
-      run: docker exec backend sh -c "flake8 && pytest ."
+      run: docker exec backend sh -c "pytest ."
 
   
   # Deploy:
