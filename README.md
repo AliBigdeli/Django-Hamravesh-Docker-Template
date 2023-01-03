@@ -14,13 +14,13 @@
 - [Guideline](#guideline)
 - [Goal](#goal)
 - [Development usage](#development-usage)
-      - [Clone the repo](#clone-the-repo)
-      - [Enviroment Varibales](#enviroment-varibales)
-      - [Build everything:](#build-everything)
-      - [Note:](#note)
-      - [Check it out in a browser:](#check-it-out-in-a-browser)
+  - [Clone the repo](#clone-the-repo)
+  - [Enviroment Varibales](#enviroment-varibales)
+  - [Build everything](#build-everything)
+  - [Note](#note)
+  - [Check it out in a browser](#check-it-out-in-a-browser)
 - [Testing Usage](#testing-usage)
-      - [running all tests:](#running-all-tests)
+  - [running all tests](#running-all-tests)
 - [Hamravesh deployment](#hamravesh-deployment)
 - [License](#license)
 - [Bugs](#bugs)
@@ -40,13 +40,13 @@ That's because we're going to be running shell commands. You can always modify
 these commands for PowerShell if you want.
 
 
-#### Clone the repo
+## Clone the repo
 Clone this repo anywhere you want and move into the directory:
 ```sh
 git clone https://github.com/AliBigdeli/Django-HamraveshTest-App.git
 ```
 
-#### Enviroment Varibales
+## Enviroment Varibales
 enviroment varibales are included in docker-compose.yml file for debugging mode and you are free to change commands inside:
 
 ```docker
@@ -57,7 +57,7 @@ services:
       - DEBUG=True
 ```
 
-#### Build everything:
+## Build everything
 
 *The first time you run this it's going to take 5-10 minutes depending on your
 internet connection speed and computer's hardware specs. That's because it's
@@ -70,16 +70,16 @@ docker compose up --build
 Now that everything is built and running we can treat it like any other Django
 app.
 
-#### Note:
+## Note
 
 If you receive an error about a port being in use? Chances are it's because
 something on your machine is already running on port 8000. then you have to change the docker-compose.yml file according to your needs.
-#### Check it out in a browser:
+## Check it out in a browser
 
 Visit <http://localhost:8000> in your favorite browser.
 
 # Testing Usage
-#### running all tests:
+## running all tests
 ```sh
 docker compose run --rm backend sh -c " black -l 79 && flake8 && python manage.py test" -v core:/app
 ```
