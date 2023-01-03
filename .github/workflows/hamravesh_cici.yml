@@ -29,6 +29,6 @@ jobs:
     - uses: actions/checkout@v3
     - name: deploy to hamravesh
       run: |
-        curl --location --request GET 'https://api.console.hamravesh.ir/api/v1/darkube/build/build_last_commit/?app_id=a2d4014a-7742-44e0-a386-39a68d32f52f' \
-        --header 'x-organization: sama' \
-        --header 'Authorization: Api-key 76d9d830-70b8-4efc-b88e-10ce0b4c5c22'
+        curl --location --request GET 'https://api.console.hamravesh.ir/api/v1/darkube/build/build_last_commit/?app_id=${HAMRAVESH_APP_ID}' \
+        --header 'x-organization: ${HAMRAVESH_ORG_NAME}' \
+        --header 'Authorization: Api-key ${HAMRAVESH_API_KEY}'
