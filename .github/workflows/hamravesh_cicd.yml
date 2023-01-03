@@ -13,8 +13,8 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     services:
-      postgres: 
-        image: postgres
+      db: 
+        image: postgres:13-alpine
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
