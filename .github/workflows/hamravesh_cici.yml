@@ -31,3 +31,4 @@ jobs:
       run: |
         docker run darkube-cli:v1.1 sh -c "export IMAGE='registry.hamdocker.ir/hamravesh/${{secrets.APPNAME}}'"
         docker run darkube-cli:v1.1 sh -c "export IMAGE='registry.hamdocker.ir/hamravesh/${{secrets.APPNAME}}'"
+
