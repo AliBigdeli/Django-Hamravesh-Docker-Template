@@ -12,14 +12,23 @@ jobs:
   Test:
     name: Test
     runs-on: ubuntu-latest
+    services:
+      postgres: 
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432 # exposing 5432 port for application to use
     steps:
     - uses: actions/checkout@v3
     - name: unpack environments
-      run: cp ./envs/dev/django/.env.sample ./envs/dev/django/.env && cp ./envs/dev/postgre/.env.sample ./envs/dev/postgre/.env
-    - name: Setup Docker-Compose
-      run: docker-compose up --build -d
+      run: cp ./envs/dev/django/.env.sample ./envs/dev/django/.env
+    - name: Setup docker image
+      run: docker build -t test-app  -f ./dockerfiles/dev/django/Dockerfile .
     - name: Run Tests
-      run: docker-compose exec -T backend sh -c "python manage.py test"
+      run: docker run test-app sh -c "yes | python manage.py makemigrations  && yes | python manage.py migrate && python manage.py test"
 
   
   # Deploy:
