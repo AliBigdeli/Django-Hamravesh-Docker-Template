@@ -33,7 +33,7 @@ jobs:
     - name: Setup docker image
       run: docker build -t test-app  -f ./dockerfiles/dev/django/Dockerfile .
     - name: Run Tests
-      run: docker run test-app --env-file ./envs/dev/django/.env  sh -c "python manage.py check_database && yes | python manage.py makemigrations  && yes | python manage.py migrate && python manage.py test"
+      run: docker run --env-file ./envs/dev/django/.env test-app sh -c "python manage.py check_database && yes | python manage.py makemigrations  && yes | python manage.py migrate && python manage.py test"
 
   
   # Deploy:
