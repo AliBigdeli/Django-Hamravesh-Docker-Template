@@ -27,7 +27,8 @@ SECRET_KEY = config("SECRET_KEY", default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=True)
-SHOW_DEBUGGER_TOOLBAR = config("SHOW_DEBUGGER_TOOLBAR", cast=bool, default=False)
+SHOW_DEBUGGER_TOOLBAR = config(
+    "SHOW_DEBUGGER_TOOLBAR", cast=bool, default=False)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
@@ -58,7 +59,6 @@ INSTALLED_APPS = [
 ]
 
 
-
 SITE_ID = config("SITE_ID", cast=int, default=1)
 
 MIDDLEWARE = [
@@ -71,7 +71,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 
 
 ROOT_URLCONF = "core.urls"
@@ -158,6 +157,12 @@ STATICFILES_DIRS = [
     BASE_DIR / "staticfiles",
 ]
 
+# production whitenoise
+if config("ENABLE_WHITENOISE", cast=bool, default=False):
+    # Insert Whitenoise Middleware.
+    MIDDLEWARE = tuple(
+        ['whitenoise.middleware.WhiteNoiseMiddleware'] + list(MIDDLEWARE))
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -175,46 +180,38 @@ MESSAGE_TAGS = {
 
 
 # Email Configurations for production and development
-if DEBUG:    
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_USE_TLS = False
-    EMAIL_HOST = "smtp4dev"
-    EMAIL_HOST_USER = ""
-    EMAIL_HOST_PASSWORD = ""
-    EMAIL_PORT = 25
-else:
-    EMAIL_BACKEND = config(
-        "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
-    )
-    EMAIL_HOST = config("EMAIL_HOST", default="mail.example.come")
-    EMAIL_PORT = int(config("EMAIL_PORT", default=465))
-    EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="infor@example.com")
-    EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="password")
-    EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=True)
-    EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)
-    DEFAULT_FROM_EMAIL = config(
-        "DEFAULT_FROM_EMAIL", default="infor@example.com")
+EMAIL_BACKEND = config(
+    "EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"
+)
+EMAIL_HOST = config("EMAIL_HOST", default="smtp4dev")
+EMAIL_PORT = int(config("EMAIL_PORT", default=25))
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=False)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)
+DEFAULT_FROM_EMAIL = config(
+    "DEFAULT_FROM_EMAIL", default="info@example.com")
 
 
 # security configs for production
 if config("USE_SSL_CONFIG", cast=bool, default=False):
     # Https settings
-    # SESSION_COOKIE_SECURE = True
-    # CSRF_COOKIE_SECURE = True
-    # SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
 
     # HSTS settings
-    # SECURE_HSTS_SECONDS = 31536000  # 1 year
-    # SECURE_HSTS_PRELOAD = True
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_PRELOAD = True
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
     # more security settings
     SECURE_CONTENT_TYPE_NOSNIFF = True
     #  SECURE_BROWSER_XSS_FILTER = True
-    # X_FRAME_OPTIONS = "SAMEORIGIN"
-    # SECURE_REFERRER_POLICY = "strict-origin"
-    # USE_X_FORWARDED_HOST = True
-    # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    X_FRAME_OPTIONS = "SAMEORIGIN"
+    SECURE_REFERRER_POLICY = "strict-origin"
+    USE_X_FORWARDED_HOST = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
@@ -236,47 +233,23 @@ CORS_ALLOW_ALL_ORIGINS = True
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:8000",
 #     "http://127.0.0.1:8000",
-
 # ]
 
 # swagger configs
 SHOW_SWAGGER = config("SHOW_SWAGGER", cast=bool, default=True)
 SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": True,
-    "SECURITY_DEFINITIONS": [],
-    "LOGIN_URL": "rest_framework:login",
-    "LOGOUT_URL": "rest_framework:logout",
+    "USE_SESSION_AUTH": False,
+    "SECURITY_DEFINITIONS": {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
     "REFETCH_SCHEMA_ON_LOGOUT": True,
     "JSON_EDITOR": True,
 }
 
-# debugger config
-if config("FILE_DEBUGGER", cast=bool, default=True):
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "formatters": {
-            "simple": {
-                "format": "%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s"
-            },
-        },
-        "handlers": {
-            "console": {"class": "logging.StreamHandler"},
-            "file": {
-                "level": "DEBUG",
-                "class": "logging.FileHandler",
-                "filename": "log.django",
-                "formatter": "simple",
-            },
-        },
-        "loggers": {
-            "default": {
-                "handlers": ["console", "file"],
-                "level": config("DJANGO_LOG_LEVEL", default="WARNING"),
-                "propagate": True,
-            },
-        },
-    }
 
 # django debug toolbar for docker usage
 if SHOW_DEBUGGER_TOOLBAR:
@@ -288,8 +261,9 @@ if SHOW_DEBUGGER_TOOLBAR:
     ]
     import socket  # only if you haven't already imported this
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
-    
+    INTERNAL_IPS = [
+        ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+
 
 # sentry online monitoring
 SENTRY_ENABLE = config("SENTRY_ENABLE", cast=bool, default=False)
@@ -313,4 +287,3 @@ if SENTRY_ENABLE == True:
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True
     )
-
