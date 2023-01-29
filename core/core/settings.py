@@ -160,10 +160,9 @@ STATICFILES_DIRS = [
 # production whitenoise
 if config("ENABLE_WHITENOISE", cast=bool, default=False):
     # Insert Whitenoise Middleware.
-    MIDDLEWARE = tuple(
-        ['whitenoise.middleware.WhiteNoiseMiddleware'] + list(MIDDLEWARE))
-
-
+    MIDDLEWARE += [
+        "whitenoise.middleware.WhiteNoiseMiddleware",
+    ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
