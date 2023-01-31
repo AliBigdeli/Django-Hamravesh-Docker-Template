@@ -61,7 +61,7 @@ jobs:
         echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
         echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
       
-    - uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    - uses: docker://darkube-cli:v1.1
     - name: Connect and build
       run: |
         'darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # choosing darkube cli for building
-    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    container: docker://darkube-cli:v1.1
     steps:
 
     # checking out the code
