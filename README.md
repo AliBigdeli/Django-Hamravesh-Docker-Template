@@ -96,7 +96,7 @@ docker compose exec backend sh -c sh -c " black -l 79 && flake8 && python manage
 
 # Hamravesh deployment
 
-## 0- create and account
+## 0- Create and account
 in order to deploy your project inside hamravesh first you need to create an account. so please go to the following url and create your account.
 
 <https://console.hamravesh.com/signup>
@@ -104,7 +104,7 @@ in order to deploy your project inside hamravesh first you need to create an acc
 after that you need to sign in to your console panel. which is going to be like this.
 <div align="center" ><img style="width:700px" src="./docs/hamravesh-console.png"></div>
 
-## 1- create a repo app
+## 1- Create a repo app
 in order to deploy your project you can use repo mode (or منبع گیت) after clicking on the item. you will see a panel like this below:
 
 <div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step1.png"></div>
@@ -123,7 +123,7 @@ Note: as we are going to implement ci/cd and other stuffs we avoid auto deployme
 
 after your done with the inputs just click on (تنظیمات اپ) and go for next step.
 
-## 2 - setup database
+## 2 - Setup database
 follow the provided steps to finish this section.
 
 
@@ -163,10 +163,10 @@ psql -U postgres -c "create database <db_name>"
 
 
 
-## 3 - setup django app
+## 3 - Setup django app
 follow the provided steps to finish this section.
 
-### 1- general info (اطلاعات عمومی)
+### 1- General info (اطلاعات عمومی)
 <div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step2-1.png"></div>
 
 in this page you have to provide general information's about the app you are about to create, which in my case are as follows:
@@ -186,7 +186,7 @@ in this section you have to provide the environment variables which are going to
 
 Note: provided information is just enough to run our program for more details please visit this url <https://docs.hamravesh.com/darkube/create/git-repo/settings/envs/>
 
-### 3- آدرس دامنه
+### 3- Domain Address
 <div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step2-3.png"></div>
 
 pick a name for you app which is going to be accessed through the web and for better security please enable https redirect.
@@ -195,7 +195,7 @@ keep in mind that you can give a different dns name through a provider like arva
 Note: provided information is just enough to run our program for more details please visit this url <https://docs.hamravesh.com/darkube/create/git-repo/settings/domain-address/>
 
 
-### 3 - pick a plan 
+### 3 - Pick a plan 
 <div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step3-1.png"></div>
 
 for launching purposes you have to pick a plan for resources. based on the scale and traffic of your project you have to pick one.
