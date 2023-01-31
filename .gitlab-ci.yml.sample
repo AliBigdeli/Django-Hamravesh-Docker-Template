@@ -65,7 +65,6 @@ darkube_build:
   #   - my-runner
 
   script:
-  - export IMAGE="registry.hamdocker.ir/<NAMESPACE>/<APP_NAME>"
   - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
     . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
   stage: build

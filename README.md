@@ -223,9 +223,18 @@ in order to do ci/cd in the sample project for gitlab/hamgit you have to create 
 after that our pipeline will be always listening to the prod branch. if you commit in this branch it will go through the process.
 
 
-note that you have to declare 4 or more environment variables in your gitlab/hamgit project repo, which you can add it by going to ```Settings>CI/CD>Variables```, and in this section try to add all the needed variables.
+note that you have to declare 5 or more environment variables in your gitlab/hamgit project repo, which you can add it by going to ```Settings>CI/CD>Variables```, and in this section try to add all the needed variables.
 
 <div align="center" ><img style="width:700px" src="./docs/gitlab-envs.png"></div>
+
+these variables should be included:
+- DARKUBE_APP_ID - ``` which can be found in app info page ```
+- DARKUBE_DEPLOY_TOKEN - ``` which can be found in app info page ```
+- IMAGE -  ``` registry.hamdocker.ir/<USERNAME>/<APPNAME> ```
+- REGISTERY - ``` registry.hamdocker.ir/<USERNAME> ```
+- REGISTERY_PASSWORD - ``` registry password ```
+- REGISTERY_USER - ``` username like 'bigdeliali3' ```
+
 
 for having ```DARKUBE_APP_ID``` and ```DARKUB_DEPLOY_TOKEN``` head to the app page and use the following parameters in the picture.
 
