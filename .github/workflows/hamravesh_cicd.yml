@@ -56,11 +56,11 @@ jobs:
     - uses: FranzDiebold/github-env-vars-action@v2
     - name: Creating preneeded envs
       run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+        echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
+        echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
     - name: Connect and build
       run: |
-        'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
+        'darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
         . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
 
 
@@ -85,12 +85,13 @@ jobs:
     - uses: FranzDiebold/github-env-vars-action@v2
     - name: Creating preneeded envs
       run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+        echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
+        echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
+        echo "CI_JOB_ID=`echo $CI_RUN_ID`" >> $GITHUB_ENV
     - name: Connect and build
       run: |
-        - darkube deploy --ref prod --token ${DARKUB_DEPLOY_TOKEN} --app-id
-          ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
-          "${CI_JOB_ID}" --stateless-app true
+        - darkube deploy --ref prod --token ${{ env.DARKUB_DEPLOY_TOKEN}} --app-id
+          ${{ env.DARKUBE_APP_ID }}  --image-tag "${{ env.CI_COMMIT_SHORT_SHA}}" --job-id
+          "${{ env.CI_JOB_ID }}" --stateless-app true
 
           
