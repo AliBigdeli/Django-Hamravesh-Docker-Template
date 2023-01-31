@@ -1,0 +1,100 @@
+
+# migration docs: https://docs.github.com/en/actions/migrating-to-github-actions/migrating-from-gitlab-cicd-to-github-actions
+name: Django Project Test and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # Test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   services:
+  #     postgres: 
+  #       image: postgres:13-alpine
+  #       env:
+  #         POSTGRES_USER: postgres
+  #         POSTGRES_PASSWORD: postgres
+  #         POSTGRES_DB: postgres
+  #         POSTGRES_PORT: 5432
+  #       ports:
+  #         - 5432:5432
+  #       # Set health checks to wait until postgres has started
+  #       options: >-
+  #         --health-cmd pg_isready
+  #         --health-interval 10s
+  #         --health-timeout 5s
+  #         --health-retries 5
+
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: unpack environments
+  #     run: cp ./envs/dev/django/.env.sample ./envs/dev/django/.env
+  #   - name: Setup docker image
+  #     run: docker build -t test-app  -f ./dockerfiles/dev/django/Dockerfile .
+  #   - name: Run Tests
+  #     run: docker run --env-file ./envs/dev/django/.env test-app sh -c "python manage.py check_database && yes | python manage.py makemigrations  && yes | python manage.py migrate && python manage.py test"
+
+  
+  Build:
+    # if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    name: Build
+    # needs: Test
+    if: contains( github.ref, 'prod')
+
+    # choosing which os to run on
+    runs-on: ubuntu-latest
+
+    # choosing darkube cli for building
+    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    steps:
+    - uses: actions/checkout@v3
+    - name: Creating preneeded envs
+      run: |
+        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+    - name: Connect and build
+      uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+
+      # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
+      script:
+        - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
+          . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
+
+
+  Deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    name: Build
+
+    # depends on build job
+    needs: Build
+
+    # choosing which os to run on
+    runs-on: ubuntu-latest
+
+    # choosing darkube cli for building
+    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    steps:
+
+    # checking out the code
+    - uses: actions/checkout@v3
+    
+    # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
+    - name: Creating preneeded envs
+      uses: FranzDiebold/github-env-vars-action@v2
+      run: |
+        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
+        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+    - name: Connect and build
+      uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+
+      script:
+        - darkube deploy --ref prod --token ${DARKUB_DEPLOY_TOKEN} --app-id
+          ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
+          "${CI_JOB_ID}" --stateless-app true
+
+          

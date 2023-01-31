@@ -64,6 +64,7 @@ darkube_build:
   # tags:
   #   - my-runner
 
+  # name of the predefined env variables: https://github.com/gitlabhq/gitlabhq/blob/master/doc/ci/variables/predefined_variables.md
   script:
   - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
     . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
