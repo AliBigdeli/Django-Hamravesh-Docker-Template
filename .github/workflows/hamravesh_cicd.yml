@@ -55,14 +55,14 @@ jobs:
       uses: actions/checkout@v3
       
     # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
+    - uses: FranzDiebold/github-env-vars-action@v2
     - name: Creating preneeded envs
-      uses: FranzDiebold/github-env-vars-action@v2
       run: |
         echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
         echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
       
+    - uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     - name: Connect and build
-      uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
       run: |
         'darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
         . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
@@ -94,7 +94,7 @@ jobs:
         echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
         echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
         echo "CI_JOB_ID=`echo $CI_RUN_ID`" >> $GITHUB_ENV
-        
+
     - uses: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
     - name: deploy
     
