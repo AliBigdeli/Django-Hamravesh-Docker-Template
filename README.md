@@ -169,9 +169,9 @@ now that your database is created you can use it for connecting other apps to it
 
 the provided database credentials and url are as follows:
 ``` properties
-db_address: my-site-postgre.bigdeliali3.svc:5432
-db_username: postgres
-db_password: ddGrZM7u3BsduXm5ph3WzPYlMWSMTXbu
+PGDB_address: my-site-postgre.bigdeliali3.svc:5432
+PGDB_username: postgres
+PGDB_password: ddGrZM7u3BsduXm5ph3WzPYlMWSMTXbu
 ```
 Note: if you dont want to use the default database by the name of postgres,
 you just have to head to the terminal tab and create a another database for your project you can call it anything you want.
@@ -179,7 +179,7 @@ you just have to head to the terminal tab and create a another database for your
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-5.png"></div>
 
 ```shell
-psql -U postgres -c "create database <db_name>"
+psql -U postgres -c "create database <PGDB_name>"
 ```
 
 
