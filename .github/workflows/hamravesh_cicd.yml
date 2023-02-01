@@ -38,11 +38,13 @@ jobs:
     - name: Run migrations
       env: 
             DB_HOST: 127.0.0.1
-      run: python core/manage.py migrate
+            DJANGO_SETTINGS_MODULE: core.settings
+      run: cd core && python manage.py migrate
     - name: Run tests
       env: 
           DB_HOST: 127.0.0.1
-      run: pytest ./core/
+          DJANGO_SETTINGS_MODULE: core.settings
+      run: cd core && pytest .
 
   
   # Build:
