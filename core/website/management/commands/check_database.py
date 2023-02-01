@@ -9,10 +9,10 @@ class Command(BaseCommand):
     
     def handle(self, *args, **kwargs):
         print("Start checking for database...")
-        db_conn = None
-        while not db_conn:
+        PGDBconn = None
+        while not PGDBconn:
             try:
-                db_conn = connections['default']
+                PGDBconn = connections['default']
             except OperationalError:
                 print('Database unavailable, waiting 1 second...')
                 time.sleep(1)
