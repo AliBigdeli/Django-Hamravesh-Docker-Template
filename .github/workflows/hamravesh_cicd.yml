@@ -10,7 +10,7 @@ on:
 
 env: 
     DB_HOST: 127.0.0.1
-    DJANGO_SETTINGS_MODULE: core.settings
+
 
 jobs:
   Test:
@@ -41,6 +41,8 @@ jobs:
     - name: Run migrations
       run: cd core && python manage.py migrate
     - name: Run tests
+      env:
+        DJANGO_SETTINGS_MODULE: core.settings
       run: cd core && pytest .
 
   
