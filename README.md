@@ -16,6 +16,7 @@
 # Guideline
 - [Guideline](#guideline)
 - [Goal](#goal)
+- [Video Instructions](#video-instructions)
 - [Development usage](#development-usage)
   - [Clone the repo](#clone-the-repo)
   - [Enviroment Varibales](#enviroment-varibales)
@@ -29,7 +30,7 @@
   - [1- Create a repo app](#1--create-a-repo-app)
   - [2- Setup database](#2--setup-database)
   - [3- Setup django app](#3--setup-django-app)
-    - [1- General info (اطلاعات عمومی)](#1--general-info-اطلاعات-عمومی)
+    - [1- General info](#1--general-info)
     - [2- Environment Variables](#2--environment-variables)
     - [3- Domain Address](#3--domain-address)
     - [4- Pick a plan](#4--pick-a-plan)
@@ -48,6 +49,9 @@
 
 # Goal
 This project main goal is to provide a simple way to deploy a django project into hamravesh service provider.
+
+# Video Instructions
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/video.png"></div>
 
 # Development usage
 You'll need to have [Docker installed](https://docs.docker.com/get-docker/).
@@ -184,12 +188,12 @@ psql -U postgres -c "create database <db_name>"
 ## 3- Setup django app
 follow the provided steps to finish this section.
 
-### 1- General info (اطلاعات عمومی)
+### 1- General info
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step2-1.png"></div>
 
 in this page you have to provide general information's about the app you are about to create, which in my case are as follows:
 
-``` properties
+```properties
 app_name: my-site # name of the app which is going to be called inside the portal
 service_port: 8000 # which is based on the gunicorn port
 execute_command: gunicorn --bind 0.0.0.0:8000 core.wsgi:application
