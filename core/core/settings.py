@@ -27,8 +27,7 @@ SECRET_KEY = config("SECRET_KEY", default="test")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=True)
-SHOW_DEBUGGER_TOOLBAR = config(
-    "SHOW_DEBUGGER_TOOLBAR", cast=bool, default=False)
+SHOW_DEBUGGER_TOOLBAR = config("SHOW_DEBUGGER_TOOLBAR", cast=bool, default=False)
 
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
@@ -188,8 +187,7 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
 EMAIL_USE_SSL = config("EMAIL_USE_SSL", cast=bool, default=False)
 EMAIL_USE_TLS = config("EMAIL_USE_TLS", cast=bool, default=False)
-DEFAULT_FROM_EMAIL = config(
-    "DEFAULT_FROM_EMAIL", default="info@example.com")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="info@example.com")
 
 
 # security configs for production
@@ -224,7 +222,8 @@ REST_FRAMEWORK = {
 }
 if config("DISABLE_BROWSEABLE_API", cast=bool, default=False):
     REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
-        "rest_framework.renderers.JSONRenderer",)
+        "rest_framework.renderers.JSONRenderer",
+    )
 
 
 # cors headers config
@@ -239,11 +238,7 @@ SHOW_SWAGGER = config("SHOW_SWAGGER", cast=bool, default=True)
 SWAGGER_SETTINGS = {
     "USE_SESSION_AUTH": False,
     "SECURITY_DEFINITIONS": {
-        'Bearer': {
-            'type': 'apiKey',
-            'name': 'Authorization',
-            'in': 'header'
-        }
+        "Bearer": {"type": "apiKey", "name": "Authorization", "in": "header"}
     },
     "REFETCH_SCHEMA_ON_LOGOUT": True,
     "JSON_EDITOR": True,
@@ -259,9 +254,12 @@ if SHOW_DEBUGGER_TOOLBAR:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
     ]
     import socket  # only if you haven't already imported this
+
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS = [
-        ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
+    INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + [
+        "127.0.0.1",
+        "10.0.2.2",
+    ]
 
 
 # sentry online monitoring
@@ -276,13 +274,11 @@ if SENTRY_ENABLE == True:
         integrations=[
             DjangoIntegration(),
         ],
-
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.
         # We recommend adjusting this value in production.
         traces_sample_rate=1.0,
-
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
-        send_default_pii=True
+        send_default_pii=True,
     )

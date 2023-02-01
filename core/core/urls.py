@@ -46,12 +46,10 @@ def trigger_error(request):
 urlpatterns = [
     # urls of the admin panel
     path("admin/", admin.site.urls),
-
     # url inclusion of the app
     path("", include("website.urls")),
-
     # testing sentry logger
-    path('sentry-debug/', trigger_error),
+    path("sentry-debug/", trigger_error),
 ]
 
 # if this is enable instead of seeing the project you will see a page which shows a simple text as you will be launching soon
@@ -63,23 +61,21 @@ if settings.COMINGSOON:
 
 # serving medias and static files in debug mode
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL,
-                          document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 # showing debugger toolbar when you are using debug mode
 if settings.SHOW_DEBUGGER_TOOLBAR:
-    urlpatterns += [path('__debug__/', include('debug_toolbar.urls')),
-                    ]
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]
 
 
 # showing swagger and restframework api authentications
 if settings.SHOW_SWAGGER:
     urlpatterns += [
-        path("api-auth/", include("rest_framework.urls",
-                                  namespace="rest_framework")),
+        path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
         path(
             "swagger/api.json",
             schema_view.without_ui(cache_timeout=0),
