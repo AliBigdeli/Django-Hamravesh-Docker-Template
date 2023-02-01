@@ -25,7 +25,7 @@ jobs:
 
     env: 
       DB_HOST: 127.0.0.1
-
+    
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.9
@@ -33,12 +33,12 @@ jobs:
       with:
         python-version: 3.9
     - name: Install dependencies
-
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run migrations
-      run: cd core && python manage.py migrate
+      working-directory: ./core
+      run: python manage.py migrate
     - name: Run tests
       env:
         DJANGO_SETTINGS_MODULE: core.settings
