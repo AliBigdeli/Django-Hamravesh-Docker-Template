@@ -63,14 +63,14 @@ these commands for PowerShell if you want.
 
 ## Clone the repo
 Clone this repo anywhere you want and move into the directory:
-```sh
+```bash
 git clone https://github.com/AliBigdeli/Django-Hamravesh-Docker-Template.git
 ```
 
 ## Enviroment Varibales
 enviroment varibales are included in docker-compose.yml file for debugging mode and you are free to change commands inside:
 
-```docker
+```yaml
 services:
   backend:
     command: sh -c "python manage.py check_database && \ 
@@ -87,7 +87,7 @@ services:
 internet connection speed and computer's hardware specs. That's because it's
 going to download a few Docker images and build the Python + requirements dependencies.*
 
-```sh
+```bash
 docker compose up --build
 ```
 
@@ -104,11 +104,11 @@ Visit <http://localhost:8000> in your favorite browser.
 
 # Testing Usage
 ## running all tests
-```sh
+```bash
 docker compose run --rm backend sh -c " black -l 79 && flake8 && python manage.py test" -v core:/app
 ```
 or
-```sh
+```bash
 docker compose exec backend sh -c sh -c " black -l 79 && flake8 && python manage.py test" 
 ```
 
