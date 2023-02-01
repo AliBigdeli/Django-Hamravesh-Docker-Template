@@ -28,3 +28,6 @@ pytest-django
 # database client
 psycopg2-binary
 
+# sentry logging
+sentry_sdk
+
