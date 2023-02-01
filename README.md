@@ -1,5 +1,5 @@
 <div align="center">
-<img style="width:700px" src="./docs/hamravesh-banner.png">
+<img loading="lazy" style="width:700px" src="./docs/hamravesh-banner.png">
 <h1 align="center">Django3.2 Hamravesh Template</h1>
 <h3 align="center">Sample Project to use hamravesh service provider for django app</h3>
 </div>
@@ -120,12 +120,12 @@ in order to deploy your project inside hamravesh first you need to create an acc
 <https://console.hamravesh.com/signup>
 
 after that you need to sign in to your console panel. which is going to be like this.
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-console.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-console.png"></div>
 
 ## 1- Create a repo app
 in order to deploy your project you can use repo mode (or منبع گیت) after clicking on the item. you will see a panel like this below:
 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step1.png"></div>
 
 as you can see you have to provide your github/gitlab/hamgit repo address for deployment. 
 in our case the configuration will be as follow:
@@ -149,19 +149,19 @@ follow the provided steps to finish this section.
 surely you are going to need a postgres database for your deployment so all you have to do is to create a postgres app first.
 in the app section click on the PostgreSQL database.
 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step0-1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-1.png"></div>
 
 then in the next window pick a name for the database service name.
 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step0-2.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-2.png"></div>
 
 Note: in our case we dont need to access the database through the internet.
 
 after that just choose a plan for it and create the database instance.
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step0-3.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-3.png"></div>
 
 now that your database is created you can use it for connecting other apps to it.
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step0-4.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-4.png"></div>
 
 the provided database credentials and url are as follows:
 ``` properties
@@ -172,7 +172,7 @@ db_password: ddGrZM7u3BsduXm5ph3WzPYlMWSMTXbu
 Note: if you dont want to use the default database by the name of postgres,
 you just have to head to the terminal tab and create a another database for your project you can call it anything you want.
 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step0-5.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step0-5.png"></div>
 
 ```shell
 psql -U postgres -c "create database <db_name>"
@@ -185,7 +185,7 @@ psql -U postgres -c "create database <db_name>"
 follow the provided steps to finish this section.
 
 ### 1- General info (اطلاعات عمومی)
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step2-1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step2-1.png"></div>
 
 in this page you have to provide general information's about the app you are about to create, which in my case are as follows:
 
@@ -198,14 +198,14 @@ Note: provided information is just enough to run our program for more details pl
 <https://docs.hamravesh.com/darkube/create/git-repo/settings/general/>
 
 ### 2- Environment Variables
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step2-2.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step2-2.png"></div>
 
 in this section you have to provide the environment variables which are going to be used in the project. you can switch to editor and pase our template that is placed in /envs/prod/.env.sample
 
 Note: provided information is just enough to run our program for more details please visit this url <https://docs.hamravesh.com/darkube/create/git-repo/settings/envs/>
 
 ### 3- Domain Address
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step2-3.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step2-3.png"></div>
 
 pick a name for you app which is going to be accessed through the web and for better security please enable https redirect.
 keep in mind that you can give a different dns name through a provider like arvan or cloudflare.(we will provide more details for this matter later)
@@ -214,14 +214,14 @@ Note: provided information is just enough to run our program for more details pl
 
 
 ### 3 - Pick a plan 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step3-1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step3-1.png"></div>
 
 for launching purposes you have to pick a plan for resources. based on the scale and traffic of your project you have to pick one.
 
 Note: at the moment we are not using disks and we are just using the static files being served by the Whitenoise.
 
 ### 4 - wait until its deployed
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-repo-step4-1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step4-1.png"></div>
 
 now all you have to do is to wait util the project is fully deployed.
 
@@ -243,7 +243,7 @@ after that our pipeline will be always listening to the prod branch. if you comm
 
 note that you have to declare 5 or more environment variables in your gitlab/hamgit project repo, which you can add it by going to ```Settings>CI/CD>Variables```, and in this section try to add all the needed variables.
 
-<div align="center" ><img style="width:700px" src="./docs/gitlab-envs.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/gitlab-envs.png"></div>
 
 these variables should be included:
 - DARKUBE_APP_ID - ``` which can be found in app info page ```
@@ -256,15 +256,15 @@ these variables should be included:
 
 for having ```DARKUBE_APP_ID``` and ```DARKUB_DEPLOY_TOKEN``` head to the app page and use the following parameters in the picture.
 
-<div align="center" ><img style="width:700px" src="./docs/hamravesh-app-info.png"></div>
-
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-app-info.png"></div>
+ 
 for having ```REGISTRY``` and ```REGISTRY_USER``` and ```REGISTRY_PASSWORD``` head to the app page and use the following parameters in the picture.
 REGISTRY will be the url like this: ```registry.hamdocker.ir/<USERNAME>```
 and for getting the username and passwords just go to the app section and click on docker image. you will see something like this, after that click on registries.
-<div align="center" ><img style="width:700px" src="./docs/docker-app.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/docker-app.png"></div>
 
 On top of the page you can find the credentials for registry that you need.
-<div align="center" ><img style="width:700px" src="./docs/docker-registry.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/docker-registry.png"></div>
 after that if everything goes well you can see that the jobs are working.
 
 # Sentry Logger
@@ -273,11 +273,11 @@ if you need to use sentry logging as a logger for your project all you need to d
 ## 0- Create an account
 first of all head to the link below and follow instructions to create an account. until you see the dashboard.
 <https://sentry.hamravesh.com/>
-<div align="center" ><img style="width:700px" src="./docs/sentry-dashboard-step-0.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-0.png"></div>
 
 ## 1- Create Project
 Now in order to connect your django application to the sentry you have to create a project. so click on creating project and then choose django as your project base, in Setup your default alert settings you can create the alerts you need or you can do it later, and at the end of config just choose a name and select a team and hit Create Project when your done.
-<div align="center" ><img style="width:700px" src="./docs/sentry-dashboard-step-1.png"></div>
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-1.png"></div>
 
 ## 2- Implement configs
 for ease of use i have already added the scripts plus the requirements that you need for your project as below:
@@ -334,8 +334,10 @@ for testing purposes i already had put a url inside project to create an error t
   ]
   ```
 ## 4- Test logging mechanism
-now just head to the url that we have as ```https://app_name.darkube.app/sentry-debug/``` nd create a purposely error. then inside the project page you can see the log of error which happened in your project.
-
+now just head to the url that we have as ```https://app_name.darkube.app/sentry-debug/``` nd create a purposely error. then inside the project page you can see the log of error which happened in your project to get a 500 error.
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-4-1.png"></div>
+then head to the dashboard and inside project page you can see an issue
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-4-2.png"></div>
 # License
 MIT.
 
