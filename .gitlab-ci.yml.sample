@@ -9,14 +9,14 @@ Test:
   # defining the stage name
   stage: test
 
-  # only on stage
+  # only on prod mode
   only:
     refs:
-    - stage
+    - prod
 
   # defining specific runners
-  tags:
-    - sama-runner
+  # tags:
+  #   - my-runner
 
   # defining the base image 
   image: hub.hamdocker.ir/library/python:3.9-slim-buster
@@ -53,20 +53,20 @@ darkube_build:
   # using darkube image cli
   image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
 
-  # only doing the job in stage mode
+  # only doing the job in prod mode
   only:
     refs:
     - stage
 
   # defining specific runners
-  tags:
-    - sama-runner
+  # tags:
+  #   - my-runner
 
   # running build script for the project
   # name of the predefined env variables: https://github.com/gitlabhq/gitlabhq/blob/master/doc/ci/variables/predefined_variables.md
   script:
   - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
-    . --file ./dockerfiles/stage/django/Dockerfile --build-context . '
+    . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
 
   
 
@@ -79,19 +79,19 @@ darkube_deploy:
   # using darkube image cli
   image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
   
-  # only doing the job in stage mode
+  # only doing the job in prod mode
   only:
     refs:
-    - stage
+    - prod
   
   # defining specific runners
-  tags:
-    - sama-runner
+  # tags:
+  #   - my-runner
 
   # running deploy script for the project
   # name of the predefined env variables: https://github.com/gitlabhq/gitlabhq/blob/master/doc/ci/variables/predefined_variables.md
   script:
-  - darkube deploy --ref stage --token ${DARKUBE_DEPLOY_TOKEN} --app-id
+  - darkube deploy --ref prod --token ${DARKUBE_DEPLOY_TOKEN} --app-id
     ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
     "${CI_JOB_ID}" --stateless-app true
   
