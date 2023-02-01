@@ -25,20 +25,20 @@
 - [Testing Usage](#testing-usage)
   - [running all tests](#running-all-tests)
 - [Hamravesh deployment](#hamravesh-deployment)
-  - [0- Create and account](#0--create-and-account)
+  - [0- Create an account](#0--create-an-account)
   - [1- Create a repo app](#1--create-a-repo-app)
-  - [2 - Setup database](#2---setup-database)
-  - [3 - Setup django app](#3---setup-django-app)
+  - [2- Setup database](#2--setup-database)
+  - [3- Setup django app](#3--setup-django-app)
     - [1- General info (اطلاعات عمومی)](#1--general-info-اطلاعات-عمومی)
     - [2- Environment Variables](#2--environment-variables)
     - [3- Domain Address](#3--domain-address)
-    - [3 - Pick a plan](#3---pick-a-plan)
-    - [4 - wait until its deployed](#4---wait-until-its-deployed)
-  - [3 CICD Deployment](#3-cicd-deployment)
-    - [Github CICD](#github-cicd)
-    - [Gitlab/Hamgit CICD](#gitlabhamgit-cicd)
+    - [4- Pick a plan](#4--pick-a-plan)
+    - [5- wait until its deployed](#5--wait-until-its-deployed)
+- [CICD Deployment](#cicd-deployment)
+  - [Github CICD](#github-cicd)
+  - [Gitlab/Hamgit CICD](#gitlabhamgit-cicd)
 - [Sentry Logger](#sentry-logger)
-  - [0- Create an account](#0--create-an-account)
+  - [0- Create an account](#0--create-an-account-1)
   - [1- Create Project](#1--create-project)
   - [2- Implement configs](#2--implement-configs)
   - [3- Throw an Error](#3--throw-an-error)
@@ -114,7 +114,7 @@ docker compose exec backend sh -c sh -c " black -l 79 && flake8 && python manage
 
 # Hamravesh deployment
 
-## 0- Create and account
+## 0- Create an account
 in order to deploy your project inside hamravesh first you need to create an account. so please go to the following url and create your account.
 
 <https://console.hamravesh.com/signup>
@@ -141,7 +141,7 @@ Note: as we are going to implement ci/cd and other stuffs we avoid auto deployme
 
 after your done with the inputs just click on (تنظیمات اپ) and go for next step.
 
-## 2 - Setup database
+## 2- Setup database
 follow the provided steps to finish this section.
 
 
@@ -181,7 +181,7 @@ psql -U postgres -c "create database <db_name>"
 
 
 
-## 3 - Setup django app
+## 3- Setup django app
 follow the provided steps to finish this section.
 
 ### 1- General info (اطلاعات عمومی)
@@ -213,14 +213,14 @@ keep in mind that you can give a different dns name through a provider like arva
 Note: provided information is just enough to run our program for more details please visit this url <https://docs.hamravesh.com/darkube/create/git-repo/settings/domain-address/>
 
 
-### 3 - Pick a plan 
+### 4- Pick a plan 
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step3-1.png"></div>
 
 for launching purposes you have to pick a plan for resources. based on the scale and traffic of your project you have to pick one.
 
 Note: at the moment we are not using disks and we are just using the static files being served by the Whitenoise.
 
-### 4 - wait until its deployed
+### 5- wait until its deployed
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step4-1.png"></div>
 
 now all you have to do is to wait util the project is fully deployed.
@@ -228,14 +228,14 @@ now all you have to do is to wait util the project is fully deployed.
 after its done you can access the website through the url you picked in stage 3 of the setup.
 
 
-## 3 CICD Deployment
+# CICD Deployment
 For the sake of continuous integration and deployment i have provided two samples for github and gitlab/hamgit for you.
 but there will be some configurations to be added for building and deploying purposes.
 
-### Github CICD
+## Github CICD
 will be provided soon
 
-### Gitlab/Hamgit CICD
+## Gitlab/Hamgit CICD
 in order to do ci/cd in the sample project for gitlab/hamgit you have to create a duplicate of the ```.gitlab-ci.yml.sample``` but with different name as ```.gitlab-ci.yml``` in the root directory.
 
 after that our pipeline will be always listening to the prod branch. if you commit in this branch it will go through the process.
