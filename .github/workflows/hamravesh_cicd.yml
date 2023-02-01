@@ -40,9 +40,10 @@ jobs:
       working-directory: ./core
       run: python manage.py migrate
     - name: Run tests
+      working-directory: ./core
       env:
         DJANGO_SETTINGS_MODULE: core.settings
-      run: cd core && pytest .
+      run: pytest .
 
   
   # Build:
