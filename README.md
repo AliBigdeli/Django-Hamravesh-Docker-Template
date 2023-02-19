@@ -35,6 +35,7 @@
     - [3- Domain Address](#3--domain-address)
     - [4- Pick a plan](#4--pick-a-plan)
     - [5- wait until its deployed](#5--wait-until-its-deployed)
+    - [6- migrations](#6--migrations)
 - [CICD Deployment](#cicd-deployment)
   - [Github CICD](#github-cicd)
   - [Gitlab/Hamgit CICD](#gitlabhamgit-cicd)
@@ -231,6 +232,9 @@ now all you have to do is to wait util the project is fully deployed.
 
 after its done you can access the website through the url you picked in stage 3 of the setup.
 
+### 6- migrations
+dont forget to migrate your database changes, in order to do that go to terminal tab and after opening a terminal you just need to do your migrations, keep that in mind that you have to keep and do the makemigrations locally and just do the migrate on the cloud.
+<div align="center" ><img loading="lazy" style="width:700px" src="./docs/hamravesh-repo-step4-6.png"></div>
 
 # CICD Deployment
 For the sake of continuous integration and deployment i have provided two samples for github and gitlab/hamgit for you.
