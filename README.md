@@ -346,6 +346,7 @@ now just head to the url that we have as ```https://app_name.darkube.app/sentry-
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-4-1.png"></div>
 then head to the dashboard and inside project page you can see an issue
 <div align="center" ><img loading="lazy" style="width:700px" src="./docs/sentry-dashboard-step-4-2.png"></div>
+
 # License
 MIT.
 
