@@ -46,31 +46,31 @@ jobs:
       run: pytest .
 
   
-  # Build:
-  #   # if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-  #   name: Build
-  #   # needs: Test
+  Build:
+    # if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    name: Build
+    # needs: Test
 
-  #   # choosing which os to run on
-  #   runs-on: ubuntu-latest
+    # choosing which os to run on
+    runs-on: ubuntu-latest
 
-  #   # choosing darkube cli for building
-  #   container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
-  #   steps:
-  #   - name: checking out the code
-  #     uses: actions/checkout@v3
+    # choosing darkube cli for building
+    container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
+    steps:
+    - name: checking out the code
+      uses: actions/checkout@v3
       
-  #   # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
-  #   - uses: FranzDiebold/github-env-vars-action@v2
-  #   - name: Creating preneeded envs
-  #     run: |
-  #       echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
-  #       echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
+    # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
+    - uses: FranzDiebold/github-env-vars-action@v2
+    - name: Creating preneeded envs
+      run: |
+        echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
+        echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
       
-  #   - name: Connect and build
-  #     run: |
-  #       'darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
-  #       . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
+    - name: Connect and build
+      run: |
+        'sudo darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
+        . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
 
 
   # Deploy:
