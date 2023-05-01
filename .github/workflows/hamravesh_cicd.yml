@@ -57,10 +57,11 @@ jobs:
     # choosing darkube cli for building
     container: 
       image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
-
+      privileged: true
+      
     steps:
     - name: checking out the code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       
     - name: Connect and build
       run: |
