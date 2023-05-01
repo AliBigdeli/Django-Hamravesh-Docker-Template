@@ -1,109 +1,102 @@
-
 # migration docs: https://docs.github.com/en/actions/migrating-to-github-actions/migrating-from-gitlab-cicd-to-github-actions
 name: Django Project Test and Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
+# defining all jobs
 jobs:
+  # testing job
   Test:
+    # defining the job name
+    name: Test
+
+
+    # which operating system its going to use
     runs-on: ubuntu-latest
+
+    # defining the base image
+    container:
+      image: docker.io/python:3.9-slim-buster
+
+    # defining the services which it depends on
     services:
       db:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        image: docker.io/postgres:alpine
 
-    env: 
-      PGDB_HOST: 127.0.0.1
-    
+    # scripts which needs to be run before main script
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run migrations
-      working-directory: ./core
-      run: python manage.py migrate
-    - name: Run tests
-      working-directory: ./core
-      env:
-        DJANGO_SETTINGS_MODULE: core.settings
-      run: pytest .
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies and migrate database
+        run: |
+          pip3 install -r requirements.txt
+          cd ./core
+          python manage.py migrate
+          python manage.py check
+      - name: Run tests
+        env:
+          DJANGO_SETTINGS_MODULE: core.settings
+        run: pytest .
 
-  
-  # Build:
-  #   # if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-  #   name: Build
-  #   # needs: Test
+    # variables for service and main image
+    env:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
-  #   # choosing which os to run on
-  #   runs-on: ubuntu-latest
+  # building job
+  darkube_build:
+    # name of the job
+    name: Build
 
-  #   # choosing darkube cli for building
-  #   container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
-  #   steps:
-  #   - name: checking out the code
-  #     uses: actions/checkout@v3
-      
-  #   # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
-  #   - uses: FranzDiebold/github-env-vars-action@v2
-  #   - name: Creating preneeded envs
-  #     run: |
-  #       echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
-  #       echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
-      
-  #   - name: Connect and build
-  #     run: |
-  #       'darkube build --push -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_SHORT_SHA}} -t ${{ env.IMAGE }}:${{ env.CI_COMMIT_REF_SLUG }}  --workdir
-  #       . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
+     # which operating system its going to use
+    runs-on: ubuntu-latest
 
+    # using darkube image cli
+    container:
+      image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
 
-  # Deploy:
-  #   if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
-  #   name: Build
+    # only doing the job in prod mode
+    if: startsWith(github.ref, 'refs/heads/stage')
 
-  #   # depends on build job
-  #   needs: Build
+    # defining specific runners
+    # runs-on:
+    #   - my-runner
 
-  #   # choosing which os to run on
-  #   runs-on: ubuntu-latest
+    # running build script for the project
+    # name of the predefined env variables: https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Build Docker image
+        run: |
+          docker build --push -t ${{ secrets.DOCKER_REGISTRY }}/image-name:${{ github.sha }} -t ${{ secrets.DOCKER_REGISTRY }}/image-name:${{ github.ref_slug }} --file ./dockerfiles/prod/django/Dockerfile --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg CACHE_TAG=${{ github.sha }} .
 
-  #   # choosing darkube cli for building
-  #   container: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
-  #   steps:
+  # deployment job
+  darkube_deploy:
+    # name of the job
+    name: Deploy
 
-  #   # checking out the code
-  #   - name: checking out the code
-  #     uses: actions/checkout@v3
+     # which operating system its going to use
+    runs-on: ubuntu-latest
     
-  #   # name of the predefined env variables: https://docs.github.com/en/actions/learn-github-actions/variables
-    
-  #   - uses: FranzDiebold/github-env-vars-action@v2
-  #   - name: Creating preneeded envs
-  #     run: |
-  #       echo "SHORT_SHA=`echo $CI_COMMIT_SHORT_SHA | cut -c1-8`" >> $GITHUB_ENV
-  #       echo "CI_COMMIT_REF_SLUG=`echo $CI_REF_NAME_SLUG`" >> $GITHUB_ENV
-  #       echo "CI_JOB_ID=`echo $CI_RUN_ID`" >> $GITHUB_ENV
-  #   - name: deploy
-    
-  #     run: |
-  #       - darkube deploy --ref prod --token ${{ env.DARKUB_DEPLOY_TOKEN}} --app-id
-  #         ${{ env.DARKUBE_APP_ID }}  --image-tag "${{ env.CI_COMMIT_SHORT_SHA}}" --job-id
-  #         "${{ env.CI_JOB_ID }}" --stateless-app true
+    # using darkube image cli
+    container:
+      image: hamravesh.hamdocker.ir/public/darkube-cli:v1.1
 
-          
+
+    # running deploy script for the project
+    # name of the predefined env variables: https://docs.github.com/en/actions/configuring-and-managing-workflows/using-environment-variables#default-environment-variables
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Deploy to Darkube
+        env:
+          DARKUBE_APP_ID: ${{ secrets.DARKUBE_APP_ID }}
+          GITHUB_SHA: ${{ github.sha }}
+          GITHUB_REF_SLUG: ${{ github.ref_slug }}
+        run: darkube deploy --ref prod --token ${{ secrets.GITHUB_TOKEN }} --app-id $DARKUBE_APP_ID --image-tag "${GITHUB_SHA}" --job-id "${{ github.job }}" --stateless-app true
