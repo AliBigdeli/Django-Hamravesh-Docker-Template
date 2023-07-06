@@ -96,14 +96,7 @@ jobs:
     steps:
     
     # bringing the code and checking 
-    - uses: actions/checkout@v3
-
-    # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
-    # src https://docs.github.com/en/actions/learn-github-actions/variables
-    - name: Creating preneeded envs
-      run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
 
     # executing build script to build the current project image in private registry
     - name: Connect and build
@@ -111,6 +104,17 @@ jobs:
         - 'darkube build --push -t $IMAGE:$CI_COMMIT_SHORT_SHA -t $IMAGE:$CI_COMMIT_REF_SLUG  --workdir
           . --file ./dockerfiles/prod/django/Dockerfile --build-context . '
 
+    - name: Run build 
+        run: |
+          docker login $REGISTRY -u $REGISTRY_USER -p $REGISTRY_PASSWORD
+          docker build -t "$IMAGE:${GITHUB_SHA:0:7}" -f ./dockerfiles/prod/django/Dockerfile .
+          docker push "$IMAGE:${GITHUB_SHA:0:7}"
+        env:
+          REGISTRY: ${{ vars.HAMRAVESH_REGISTRY }}
+          REGISTRY_PASSWORD: ${{ vars.HAMRAVESH_REGISTRY_PASSWORD }}
+          REGISTRY_USER: ${{ vars.HAMRAVESH_REGISTRY_USER }}
+          APP_NAME: ${{ vars.DARKUBE_APP_NAME }}
+          IMAGE: ${{ vars.HAMRAVESH_REGISTRY }}/${{ vars.DARKUBE_APP_NAME }}
 
   Deploy:
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
@@ -127,22 +131,15 @@ jobs:
     steps:
 
     # checking out the code
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     
     
     # making environment variables ready for darkube cli (translating from github actions to gitlab ci naming)
     # src https://docs.github.com/en/actions/learn-github-actions/variables
-    - name: Creating preneeded envs
-      uses: FranzDiebold/github-env-vars-action@v2
-      run: |
-        echo "SHORT_SHA=`echo ${CI_COMMIT_SHORT_SHA} | cut -c1-8`" >> $GITHUB_ENV
-        echo "CI_COMMIT_REF_SLUG=`echo ${CI_REF_NAME_SLUG}`" >> $GITHUB_ENV
-
-    # executing deploy script to set the current project image in private registry
-    - name: Connect and deploy
-      script:
-        - darkube deploy --ref prod --token ${DARKUB_DEPLOY_TOKEN} --app-id
-          ${DARKUBE_APP_ID}  --image-tag "${CI_COMMIT_SHORT_SHA}" --job-id
-          "${CI_JOB_ID}" --stateless-app true
+    - name: Deploy app
+      run: darkube deploy --ref master --token ${DARKUBE_DEPLOY_TOKEN} --app-id ${DARKUBE_APP_ID}  --image-tag "${GITHUB_SHA:0:7}" --job-id "$GITHUB_RUN_ID" --stateless-app true
+      env:
+        DARKUBE_DEPLOY_TOKEN: ${{ vars.DARKUBE_DEPLOY_TOKEN }}
+        DARKUBE_APP_ID: ${{ vars.DARKUBE_APP_ID }}
 
           
