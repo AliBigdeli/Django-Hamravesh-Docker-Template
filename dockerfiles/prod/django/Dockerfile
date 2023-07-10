@@ -1,25 +1,15 @@
 # pull official base image
-FROM python:3.9-alpine
+FROM python:3.10-slim-buster
 
 # maintainers info
 LABEL maintainer="bigdeli.ali3@gmail.com"
 
-# installing dependencies
-RUN apk add --update --virtual .build-deps \
-    build-base \
-    postgresql-dev \
-    python3-dev \
-    libpq
-
-
-# install dependencies
-RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
-
-
 # set work directory
 WORKDIR /usr/src/app
+
+# install dependencies
+COPY ./requirements.txt .
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
