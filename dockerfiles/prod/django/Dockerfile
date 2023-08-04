@@ -7,17 +7,16 @@ LABEL maintainer="bigdeli.ali3@gmail.com"
 # set work directory
 WORKDIR /usr/src/app
 
-# copy project
-COPY ./core .
-
 # install dependencies
 COPY ./requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt && python manage.py collectstatic --no-input
+RUN pip install --upgrade pip && pip install -r requirements.txt 
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# copy project
+COPY ./core .
 
 # collecting static files
 RUN python manage.py collectstatic --no-input
