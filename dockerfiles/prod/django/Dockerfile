@@ -19,4 +19,4 @@ ENV PYTHONUNBUFFERED 1
 COPY ./core .
 
 # collecting static files
-CMD python3 manage.py collectstatic --no-input
+CMD python manage.py collectstatic --noinput
